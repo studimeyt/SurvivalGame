@@ -12,20 +12,20 @@ public class PlayerSprintAndCrouch : MonoBehaviour
     public float move_speed = 4f;
     public float crouch_speed = 1.5f;
     public float LyingOnGround_speed = 1f; //for sniping maybe
-    
-    private Transform look_root;
+
+    private Transform LookRoot;
     private float stand_height = 1.6f;
     private float crouch_height = 1f;
-    private float LyingOnGround_height = 1f;
+    private float LyingOnGround_height = 0.8f;
 
     private bool is_crouching;
-    private bool is_lyingOnGround;
+    private bool is_prone;
     // Start is called before the first frame update
     void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
 
-        look_root = transform.GetChild(0);
+        LookRoot = transform.GetChild(1);
         characterController = GetComponent<CharacterController>();
     }
 
@@ -42,54 +42,47 @@ public class PlayerSprintAndCrouch : MonoBehaviour
         {
             playerMovement.speed = move_speed;
         }
-        
+
     }
 
     void Sprint()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !is_crouching )
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !is_crouching)
         {
             playerMovement.speed = sprint_speed;
         }
-        if(Input.GetKeyUp(KeyCode.LeftShift) && !is_crouching )
+        if (Input.GetKeyUp(KeyCode.LeftShift) && !is_crouching)
         {
             playerMovement.speed = move_speed;
         }
     }//sprint
 
+
+
     void Crouch()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            if (is_crouching)
-            {
-                //if already crouching- stand up
-                look_root.localPosition = new Vector3(0f, stand_height, 0f);
-            }
-            else
-            {
-                // if not crouching - crouch
-                look_root.localPosition = new Vector3(0f, crouch_height, 0f);
-            }
-        }// if we press L.Ctrl
-
-    }//crouch
-
-    void LyingOnGround()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            if (is_lyingOnGround)
+            if (is_crouching )
             {
-                //if already - stand up
-                look_root.localPosition = new Vector3(0f, stand_height, 0f);
+                //crouch to stand
+                LookRoot.localPosition = new Vector3(0f, stand_height, 0f);
+                playerMovement.speed = move_speed;
+
+                is_crouching = false;
             }
             else
             {
-                // if not crouching - crouch
-                look_root.localPosition = new Vector3(0f, crouch_height, 0f);
+                //stand to crouch
+                LookRoot.localPosition = new Vector3(0f, crouch_height, 0f);
+                playerMovement.speed = crouch_speed;
+
+                is_crouching = true;
             }
-        }// if we press L.Ctrl
+        } 
 
     }//crouch
+
+   
+
 }//class
