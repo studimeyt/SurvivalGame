@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerSprintAndCrouch : MonoBehaviour
+public class PlayerSprintCrouchProne : MonoBehaviour
 {
     private PlayerMovement playerMovement;
 
@@ -11,12 +11,12 @@ public class PlayerSprintAndCrouch : MonoBehaviour
     public float sprint_speed = 8f;
     public float move_speed = 4f;
     public float crouch_speed = 1.5f;
-    public float LyingOnGround_speed = 1f; //for sniping maybe
+    public float prone_speed = 1f; //for sniping maybe
 
     private Transform LookRoot;
     private float stand_height = 1.6f;
     private float crouch_height = 1f;
-    private float LyingOnGround_height = 0.8f;
+    private float prone_height = 0.8f;
 
     private bool is_crouching;
     private bool is_prone;
@@ -36,6 +36,7 @@ public class PlayerSprintAndCrouch : MonoBehaviour
         {
             Sprint();
             Crouch();
+            Prone();
         }
 
         else
@@ -47,11 +48,11 @@ public class PlayerSprintAndCrouch : MonoBehaviour
 
     void Sprint()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !is_crouching)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !is_crouching && !is_prone)
         {
             playerMovement.speed = sprint_speed;
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && !is_crouching)
+        if (Input.GetKeyUp(KeyCode.LeftShift) && !is_crouching && !is_prone)
         {
             playerMovement.speed = move_speed;
         }
@@ -63,7 +64,7 @@ public class PlayerSprintAndCrouch : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            if (is_crouching )
+            if (is_crouching && !is_prone)
             {
                 //crouch to stand
                 LookRoot.localPosition = new Vector3(0f, stand_height, 0f);
@@ -79,10 +80,34 @@ public class PlayerSprintAndCrouch : MonoBehaviour
 
                 is_crouching = true;
             }
-        } 
+        }
 
     }//crouch
 
-   
+    void Prone()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            if (is_crouching)
+            {
+                //crouch to prone
+                LookRoot.localPosition = new Vector3(0f, prone_height, 0f);
+                playerMovement.speed = prone_speed;
+
+                is_crouching = false;
+                is_prone = true;
+            }
+            else
+            {
+                //prone to crouch
+                LookRoot.localPosition = new Vector3(0f, crouch_height, 0f);
+                playerMovement.speed = crouch_speed;
+
+                is_crouching = true;
+                is_prone = false;
+            }
+        }
+
+    }//prone
 
 }//class

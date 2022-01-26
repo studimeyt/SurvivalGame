@@ -454,13 +454,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 780300850}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42773e80d05d69c4e98d2d488cb4239d, type: 3}
+  m_Script: {fileID: 11500000, guid: 74d76154587ff7a418ef2e8aae79b5cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprint_speed: 12
-  move_speed: 5
-  crouch_speed: 2
-  LyingOnGround_speed: 1
+  sprint_speed: 8
+  move_speed: 4
+  crouch_speed: 1.5
+  prone_speed: 1
 --- !u!1 &897037212
 GameObject:
   m_ObjectHideFlags: 0
